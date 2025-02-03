@@ -37,7 +37,7 @@ function App() {
 	const [score, setScore] = useState(0);
 	const [baseColor, setBaseColor] = useState(generateRandomColor());
 	const [difficulty, setDifficulty] = useState("medium");
-	const [timeLeft, setTimeLeft] = useState(10);
+	const [timeLeft, setTimeLeft] = useState(15);
 	const [highScore, setHighScore] = useState(0);
 	const [progress, setProgress] = useState(0);
 	const [isGameActive, setIsGameActive] = useState(false);
@@ -61,13 +61,7 @@ function App() {
 		}
 	}, [timeLeft, isGameActive, hasFirstCorrectGuess]);
 
-	const startNewGame = () => {
-		setScore(0);
-		setProgress(0);
-		setHintsUsed(0);
-		setTimeLeft(10);
-		setIsGameActive(true);
-		setHasFirstCorrectGuess(false);
+	const generateNewRound = () => {
 		const newBaseColor = generateRandomColor();
 		setBaseColor(newBaseColor);
 		const similarColors = generateSimilarColors(newBaseColor, 6, difficulty);
@@ -76,6 +70,16 @@ function App() {
 		const newColorOptions = [...similarColors].sort(() => Math.random() - 0.5);
 		setTargetColor(newTargetColor);
 		setColorOptions(newColorOptions);
+	};
+
+	const startNewGame = () => {
+		setScore(0);
+		setProgress(0);
+		setHintsUsed(0);
+		setTimeLeft(15);
+		setIsGameActive(true);
+		setHasFirstCorrectGuess(false);
+		generateNewRound();
 		setGameStatus("");
 	};
 
@@ -83,9 +87,17 @@ function App() {
 		if (!isGameActive) return;
 
 		if (selectedColor === targetColor) {
-			setGameStatus("Correct! 🎉");
+			setGameStatus("Correct! ✅");
+			document.querySelector(".color-box").classList.add("correct-animation");
 			setScore(score + 1);
 			setProgress(progress + 1);
+
+			document.querySelector(".progress").classList.add("progress-animation");
+			setTimeout(() => {
+				document
+					.querySelector(".progress")
+					.classList.remove("progress-animation");
+			}, 300);
 
 			if (!hasFirstCorrectGuess) {
 				setHasFirstCorrectGuess(true);
@@ -98,25 +110,21 @@ function App() {
 			}
 
 			setTimeout(() => {
-				const newBaseColor = generateRandomColor();
-				setBaseColor(newBaseColor);
-				const similarColors = generateSimilarColors(
-					newBaseColor,
-					6,
-					difficulty
-				);
-				const newTargetColor =
-					similarColors[Math.floor(Math.random() * similarColors.length)];
-				const newColorOptions = [...similarColors].sort(
-					() => Math.random() - 0.5
-				);
-				setTargetColor(newTargetColor);
-				setColorOptions(newColorOptions);
+				generateNewRound();
 				setGameStatus("");
-				setTimeLeft(10);
+				setTimeLeft(15);
+				document
+					.querySelector(".color-box")
+					.classList.remove("correct-animation");
 			}, 1500);
 		} else {
 			setGameStatus("Wrong! Try again. ❌");
+			document.querySelector(".color-box").classList.add("wrong-animation");
+			setTimeout(() => {
+				document
+					.querySelector(".color-box")
+					.classList.remove("wrong-animation");
+			}, 500);
 		}
 	};
 
@@ -134,6 +142,12 @@ function App() {
 			setHintsUsed(hintsUsed + 1);
 		}
 	};
+
+	useEffect(() => {
+		if (isGameActive) {
+			generateNewRound();
+		}
+	}, [difficulty]);
 
 	useEffect(() => {
 		startNewGame();
@@ -168,11 +182,13 @@ function App() {
 						data-testid="colorOption"></button>
 				))}
 			</div>
-			<p
-				data-testid="gameStatus"
-				className={gameStatus.includes("Correct") ? "correct" : "wrong"}>
-				{gameStatus}
-			</p>
+			<div className="game-status">
+				<p
+					data-testid="gameStatus"
+					className={gameStatus.includes("Correct") ? "correct" : "wrong"}>
+					{gameStatus}
+				</p>
+			</div>
 			<p data-testid="score">Score: {score}</p>
 			<p>High Score: {highScore}</p>
 			<p>Time Left: {timeLeft} seconds</p>
