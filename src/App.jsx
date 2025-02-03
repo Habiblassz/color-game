@@ -1,241 +1,25 @@
-// import React, { useState, useEffect } from "react";
-// import "./app.css"; // Include CSS for styling and animations
-
-// // Function to generate a random color in hex format
-// const getRandomColor = () => {
-// 	const letters = "0123456789ABCDEF";
-// 	let color = "#";
-// 	for (let i = 0; i < 6; i++) {
-// 		color += letters[Math.floor(Math.random() * 16)];
-// 	}
-// 	return color;
-// };
-
-// // Function to generate similar shades of a base color
-// const generateSimilarColors = (baseColor, numberOfShades) => {
-// 	const shades = [];
-// 	for (let i = 0; i < numberOfShades; i++) {
-// 		// Adjust the lightness of the base color to create similar shades
-// 		const lightness = 50 + (i - numberOfShades / 2) * 10; // Adjust this formula for more/less similarity
-// 		const shade = `hsl(${baseColor.h}, ${baseColor.s}%, ${lightness}%)`;
-// 		shades.push(shade);
-// 	}
-// 	return shades;
-// };
-
-// function App() {
-// 	const [targetColor, setTargetColor] = useState("");
-// 	const [colorOptions, setColorOptions] = useState([]);
-// 	const [gameStatus, setGameStatus] = useState("");
-// 	const [score, setScore] = useState(0);
-
-// 	// Function to start a new game
-// 	const startNewGame = () => {
-// 		// Reset score to 0
-// 		setScore(0);
-// 		// Generate a new random base color
-// 		const randomColor = getRandomColor();
-// 		// Convert the random color to HSL for generating similar shades
-// 		const tempElement = document.createElement("div");
-// 		tempElement.style.color = randomColor;
-// 		document.body.appendChild(tempElement);
-// 		const computedColor = window.getComputedStyle(tempElement).color;
-// 		document.body.removeChild(tempElement);
-// 		const hslValues = computedColor.match(/\d+/g);
-// 		const baseColor = { h: hslValues[0], s: hslValues[1] };
-// 		// Generate 6 similar shades of the base color
-// 		const similarColors = generateSimilarColors(baseColor, 6);
-// 		// Randomly select one as the target color
-// 		const newTargetColor =
-// 			similarColors[Math.floor(Math.random() * similarColors.length)];
-// 		// Shuffle the color options
-// 		const newColorOptions = [...similarColors].sort(() => Math.random() - 0.5);
-// 		setTargetColor(newTargetColor);
-// 		setColorOptions(newColorOptions);
-// 		setGameStatus("");
-// 	};
-
-// 	// Function to handle user's color selection
-// 	const handleColorSelection = (selectedColor) => {
-// 		if (selectedColor === targetColor) {
-// 			setGameStatus("Correct! 🎉");
-// 			setScore(score + 1); // Increment score for correct selection
-// 			// Start a new round after a short delay
-// 			setTimeout(() => {
-// 				startNewGame();
-// 			}, 1000); // 1-second delay before starting a new round
-// 		} else {
-// 			setGameStatus("Wrong! Try again. ❌");
-// 		}
-// 	};
-
-// 	// Start the game when the component mounts
-// 	useEffect(() => {
-// 		startNewGame();
-// 	}, []);
-
-// 	return (
-// 		<div className="game-container">
-// 			<h1>Color Perception Game</h1>
-// 			<div
-// 				className="color-box"
-// 				style={{ backgroundColor: targetColor }}
-// 				data-testid="colorBox"></div>
-// 			<p data-testid="gameInstructions">Match the target color above!</p>
-// 			<div className="color-options">
-// 				{colorOptions.map((color, index) => (
-// 					<button
-// 						key={index}
-// 						style={{ backgroundColor: color }}
-// 						onClick={() => handleColorSelection(color)}
-// 						data-testid="colorOption"></button>
-// 				))}
-// 			</div>
-// 			<p data-testid="gameStatus">{gameStatus}</p>
-// 			<p data-testid="score">Score: {score}</p>
-// 			<button onClick={startNewGame} data-testid="newGameButton">
-// 				New Game
-// 			</button>
-// 		</div>
-// 	);
-// }
-
-// export default App;
-
-// import React, { useState, useEffect } from "react";
-// import "./app.css";
-
-// // Function to generate a random HSL color
-// const generateRandomColor = () => {
-// 	const h = Math.floor(Math.random() * 360); // Random hue (0-359)
-// 	const s = 50 + Math.floor(Math.random() * 30); // Saturation between 50-80%
-// 	return { h, s };
-// };
-
-// // Function to generate similar shades of a base color
-// const generateSimilarColors = (baseColor, numberOfShades) => {
-// 	const shades = [];
-// 	for (let i = 0; i < numberOfShades; i++) {
-// 		// Adjust the lightness of the base color to create similar shades
-// 		const lightness = 50 + (i - numberOfShades / 2) * 10; // Adjust this formula for more/less similarity
-// 		const shade = `hsl(${baseColor.h}, ${baseColor.s}%, ${lightness}%)`;
-// 		shades.push(shade);
-// 	}
-// 	return shades;
-// };
-
-// function App() {
-// 	const [targetColor, setTargetColor] = useState("");
-// 	const [colorOptions, setColorOptions] = useState([]);
-// 	const [gameStatus, setGameStatus] = useState("");
-// 	const [score, setScore] = useState(0);
-// 	const [baseColor, setBaseColor] = useState(generateRandomColor());
-
-// 	// Function to start a new game
-// 	const startNewGame = () => {
-// 		// Reset score to 0
-// 		setScore(0);
-// 		// Generate a new random base color
-// 		const newBaseColor = generateRandomColor();
-// 		setBaseColor(newBaseColor);
-// 		// Generate 6 similar shades of the new base color
-// 		const similarColors = generateSimilarColors(newBaseColor, 6);
-// 		// Randomly select one as the target color
-// 		const newTargetColor =
-// 			similarColors[Math.floor(Math.random() * similarColors.length)];
-// 		// Shuffle the color options
-// 		const newColorOptions = [...similarColors].sort(() => Math.random() - 0.5);
-// 		setTargetColor(newTargetColor);
-// 		setColorOptions(newColorOptions);
-// 		setGameStatus("");
-// 	};
-
-// 	// Function to handle user's color selection
-// 	const handleColorSelection = (selectedColor) => {
-// 		if (selectedColor === targetColor) {
-// 			setGameStatus("Correct! 🎉");
-// 			setScore(score + 1); // Increment score for correct selection
-// 			// Start a new round after a short delay
-// 			setTimeout(() => {
-// 				const newBaseColor = generateRandomColor();
-// 				setBaseColor(newBaseColor);
-// 				const similarColors = generateSimilarColors(newBaseColor, 6);
-// 				const newTargetColor =
-// 					similarColors[Math.floor(Math.random() * similarColors.length)];
-// 				const newColorOptions = [...similarColors].sort(
-// 					() => Math.random() - 0.5
-// 				);
-// 				setTargetColor(newTargetColor);
-// 				setColorOptions(newColorOptions);
-// 				setGameStatus("");
-// 			}, 1500); // 1.5-seconds delay before starting a new round
-// 		} else {
-// 			setGameStatus("Wrong! Try again. ❌");
-// 		}
-// 	};
-
-// 	// Start the game when the component mounts
-// 	useEffect(() => {
-// 		startNewGame();
-// 	}, []);
-
-// 	return (
-// 		<div className="game-container">
-// 			<h1>Color Perception Game</h1>
-// 			<div
-// 				className="color-box"
-// 				style={{ backgroundColor: targetColor }}
-// 				data-testid="colorBox"></div>
-// 			<p data-testid="gameInstructions">Match the target color above!</p>
-// 			<div className="color-options">
-// 				{colorOptions.map((color, index) => (
-// 					<button
-// 						key={index}
-// 						style={{ backgroundColor: color }}
-// 						onClick={() => handleColorSelection(color)}
-// 						data-testid="colorOption"></button>
-// 				))}
-// 			</div>
-// 			<p
-// 				data-testid="gameStatus"
-// 				className={gameStatus.includes("Correct") ? "correct" : "wrong"}>
-// 				{gameStatus}
-// 			</p>
-// 			<p data-testid="score">Score: {score}</p>
-// 			<button onClick={startNewGame} data-testid="newGameButton">
-// 				New Game
-// 			</button>
-// 		</div>
-// 	);
-// }
-
-// export default App;
-
 import React, { useState, useEffect } from "react";
 import "./app.css";
 
-// Function to generate a random HSL color
 const generateRandomColor = () => {
-	const h = Math.floor(Math.random() * 360); // Random hue (0-359)
-	const s = 50 + Math.floor(Math.random() * 30); // Saturation between 50-80%
+	const h = Math.floor(Math.random() * 360);
+	const s = 50 + Math.floor(Math.random() * 30);
 	return { h, s };
 };
 
-// Function to generate similar shades of a base color
 const generateSimilarColors = (baseColor, numberOfShades, difficulty) => {
 	const shades = [];
 	for (let i = 0; i < numberOfShades; i++) {
-		// Adjust the lightness of the base color to create similar shades
 		let lightness;
 		switch (difficulty) {
 			case "easy":
-				lightness = 50 + (i - numberOfShades / 2) * 20; // More distinct
+				lightness = 50 + (i - numberOfShades / 2) * 20;
 				break;
 			case "medium":
-				lightness = 50 + (i - numberOfShades / 2) * 10; // Moderately similar
+				lightness = 50 + (i - numberOfShades / 2) * 10;
 				break;
 			case "hard":
-				lightness = 50 + (i - numberOfShades / 2) * 5; // Very similar
+				lightness = 50 + (i - numberOfShades / 2) * 5;
 				break;
 			default:
 				lightness = 50 + (i - numberOfShades / 2) * 10;
@@ -273,7 +57,7 @@ function App() {
 			return () => clearTimeout(timer);
 		} else if (timeLeft === 0) {
 			setGameStatus("Time's up! Game over. ❌");
-			setIsGameActive(false); // Disable the game
+			setIsGameActive(false);
 		}
 	}, [timeLeft, isGameActive, hasFirstCorrectGuess]);
 
@@ -296,20 +80,18 @@ function App() {
 	};
 
 	const handleColorSelection = (selectedColor) => {
-		if (!isGameActive) return; // Prevent clicks if the game is over
+		if (!isGameActive) return;
 
 		if (selectedColor === targetColor) {
 			setGameStatus("Correct! 🎉");
 			setScore(score + 1);
 			setProgress(progress + 1);
 
-			// Start the timer after the first correct guess
 			if (!hasFirstCorrectGuess) {
 				setHasFirstCorrectGuess(true);
 				setIsGameActive(true);
 			}
 
-			// Update high score
 			if (score + 1 > highScore) {
 				setHighScore(score + 1);
 				localStorage.setItem("highScore", score + 1);
@@ -353,7 +135,6 @@ function App() {
 		}
 	};
 
-	// Initialize the game on first render
 	useEffect(() => {
 		startNewGame();
 	}, []);
