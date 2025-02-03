@@ -36,7 +36,7 @@ function App() {
 	const [gameStatus, setGameStatus] = useState("");
 	const [score, setScore] = useState(0);
 	const [baseColor, setBaseColor] = useState(generateRandomColor());
-	const [difficulty, setDifficulty] = useState("medium");
+	const [difficulty, setDifficulty] = useState("easy");
 	const [timeLeft, setTimeLeft] = useState(15);
 	const [highScore, setHighScore] = useState(0);
 	const [progress, setProgress] = useState(0);
@@ -171,7 +171,9 @@ function App() {
 				data-testid="colorBox"
 				className="color-box"
 				style={{ backgroundColor: targetColor }}></div>
-			<p data-testid="gameInstructions">Match the target color above!</p>
+			<p data-testid="gameInstructions">
+				Select the color that matches the target color above!
+			</p>
 			<div className="color-options">
 				{colorOptions.map((color, index) => (
 					<button
